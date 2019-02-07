@@ -1,0 +1,52 @@
+Sub assignar_asistencia()
+    Dim rango As Integer
+    rango = WorksheetFunction.CountA(Range("A1:A400"))
+    vector (rango)
+End Sub
+
+Sub vector(rango)
+    Dim Datos(300, 300) As String
+    Dim b As Integer
+    b = 2
+    For i = 1 To rango
+        If Cells(b, 1) = Cells(i, 1).Value Then
+            If b = 1 Then
+                Cells(b, 2) = Cells(b - 1, 1)
+            End If
+        Else
+            If vector_desc(Cells(b, 2).Value, Cells(i, 1).Value) = True Then
+                b = b + 1
+                Cells(b, 2) = Cells(i, 1)
+            Else
+                If comparar_hora(Cells(b, 2).Value, Cells(i, 1).Value) = True Then
+                    b = b + 1
+                    Cells(b, 2) = Cells(i, 1)
+                End If
+            End If
+        End If
+    Next i
+End Sub
+
+Function vector_desc(data1, data2)
+    Dim fecha_1, fecha_2, hora_1, hora_2 As String
+    fecha_1 = Split(data1, " ")(0)
+    fecha_2 = Split(data2, " ")(0)
+    
+    If fecha_1 <> fecha_2 Then
+        vector_desc = True
+    End If
+End Function
+
+Function comparar_hora(data1, data2)
+    Dim hora_1, hora_2, hora1, hora2 As String
+    hora_1 = Split(data1, " ")(1)
+    hora_2 = Split(data2, " ")(1)
+    hora1 = Split(hora_1, ":")(0)
+    hora2 = Split(hora_2, ":")(0)
+    If hora1 <> hora2 Then
+        comparar_hora = True
+    Else
+        comparar_hora = False
+    End If
+End Function
+
